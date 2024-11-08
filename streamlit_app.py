@@ -22,3 +22,14 @@ ingradient_list = st.multiselect("Choose upto 5 Ingredients:"
     , my_dataframe
     , max_selections = 5
     )
+
+if ingradient_list:
+    ingr_list = ','.join(ingradient_list)
+    order_insert_statement =  ("""
+        INSERT INTO smoothies.public.orders (ingredients,name_on_order)
+        VALUES ('""" + ingr_list + """','""" + name_on_order + """ \
+        ')""") 
+    order_submit = st.button("Submit Order")
+    if order_submit:
+        session.sql(order_insert_statement).collect()
+        st.success(f"Your Smoothie is ordered, {name_on_order} !")
